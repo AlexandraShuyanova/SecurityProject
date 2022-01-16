@@ -183,9 +183,9 @@ bool printSMBIOS(
             if (version >= smbios::SMBIOS_2_0)
             {
                 output << "PROCESSOR_SocketDesignation:" << entry->data.processor.SocketDesignation << '\n';
-                output << "ProcessorFamily:" << (int) entry->data.processor.ProcessorFamily << '\n';
-                output << "ProcessorManufacturer:" << entry->data.processor.ProcessorManufacturer << '\n';
-                output << "ProcessorVersion:" << entry->data.processor.ProcessorVersion << '\n';
+                output << "PROCESSOR_ProcessorFamily:" << (int) entry->data.processor.ProcessorFamily << '\n';
+                output << "PROCESSOR_Manufacturer:" << entry->data.processor.ProcessorManufacturer << '\n';
+                output << "PROCESSOR_Version:" << entry->data.processor.ProcessorVersion << '\n';
                 //output << "ProcessorID:";
                 /*for (size_t i = 0; i < 8; ++i)
                     output << std::hex << std::setw(2) << std::setfill('0') << (int) entry->data.processor.ProcessorID[i] << ' ';
@@ -199,7 +199,7 @@ bool printSMBIOS(
             }
             if (version >= smbios::SMBIOS_2_6)
             {
-                output << "ProcessorFamily2:" << entry->data.processor.ProcessorFamily2 << '\n';
+                output << "PROCESSOR_ProcessorFamily2:" << entry->data.processor.ProcessorFamily2 << '\n';
             }
             output << '\n';
         }
