@@ -182,11 +182,11 @@ QJsonObject EchoClient::fromStringToJsonObject(const QString &out)
 			if (!recordObject.contains(elemList[0])) {
 				recordObject.insert(elemList[0], value);
 			} else {
-				int i = 0;
+				int i = 1;
 				QString key = elemList[0];
 
 				while (recordObject.contains(key)) {
-					key = elemList[0] + QString::number(i);
+					key = elemList[0] + "_" + QString::number(i);
 					i++;
 				}
 
