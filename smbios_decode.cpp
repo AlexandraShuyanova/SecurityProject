@@ -85,17 +85,16 @@ bool getDMI( const std::string &path, std::vector<uint8_t> &buffer )
 
 bool printSMBIOS(
     smbios::Parser &parser,
-    QTextStream &output)
+	std::ostream &output)
 {
-	QJsonObject biosObject;
     int version = parser.version();
     const smbios::Entry *entry = NULL;
     while (true)
     {
         entry = parser.next();
         if (entry == NULL) break;
-        /*output << "Handle 0x" << std::hex << std::setw(4) << std::setfill('0') << (int) entry->handle << std::dec
-            << ", DMI Type " << (int) entry->type << ", " << (int) entry->length << " bytes\n";*/
+        output << "Handle 0x" << std::hex << std::setw(4) << std::setfill('0') << (int) entry->handle << std::dec
+            << ", DMI Type " << (int) entry->type << ", " << (int) entry->length << " bytes\n";
 
         if (entry->type == DMI_TYPE_BIOS)
         {
@@ -128,10 +127,10 @@ bool printSMBIOS(
             }
             if (version >= smbios::SMBIOS_2_1)
             {
-                //output << "[sysinfo] uuid:";
-                /*for (size_t i = 0; i < 16; ++i)
+                output << "[sysinfo] uuid:";
+                for (size_t i = 0; i < 16; ++i)
                     output << std::hex << std::setw(2) << std::setfill('0') << (int) entry->data.sysinfo.UUID[i]  << ' ';
-                output << '\n' << std::dec;*/
+                output << '\n' << std::dec;
             }
             if (version >= smbios::SMBIOS_2_4)
             {
@@ -149,7 +148,7 @@ bool printSMBIOS(
                 output << "[baseboard] product:" << entry->data.baseboard.Product << '\n';
                 output << "[baseboard] version:" << entry->data.baseboard.Version << '\n';
                 output << "[baseboard] serial_number:" << entry->data.baseboard.SerialNumber << '\n';
-                output << "[baseboard] asset_tag":" << entry->data.baseboard.AssetTag << '\n';
+                output << "[baseboard] asset_tag:" << entry->data.baseboard.AssetTag << '\n';
                 output << "[baseboard] location_in_chassis:" << entry->data.baseboard.LocationInChassis << '\n';
                 output << "[baseboard] chassis_handle:" << entry->data.baseboard.ChassisHandle << '\n';
                 output << "[baseboard] board_type:" << (int) entry->data.baseboard.BoardType << '\n';
@@ -186,10 +185,10 @@ bool printSMBIOS(
                 output << "[processor] processor_family:" << (int) entry->data.processor.ProcessorFamily << '\n';
                 output << "[processor] manufacturer:" << entry->data.processor.ProcessorManufacturer << '\n';
                 output << "[processor] version:" << entry->data.processor.ProcessorVersion << '\n';
-                //output << "[processor] processor_id:";
-                /*for (size_t i = 0; i < 8; ++i)
+                output << "[processor] processor_id:";
+                for (size_t i = 0; i < 8; ++i)
                     output << std::hex << std::setw(2) << std::setfill('0') << (int) entry->data.processor.ProcessorID[i] << ' ';
-                output << std::dec << '\n';*/
+                output << std::dec << '\n';
             }
             if (version >= smbios::SMBIOS_2_5)
             {
@@ -264,12 +263,23 @@ bool printSMBIOS(
                 output << "[oemstrings] count:" << (int) entry->data.oemstrings.Count << '\n';
                 const char *ptr = entry->data.oemstrings.Values;
                 int c = entry->data.oemstrings.Count;
+				output << "[oemstrings] values:";
+				int i = 0;
                 while (ptr != nullptr && *ptr != 0 && c > 0)
                 {
-                    output << "         [" << ptr << "]" << '\n';
+					if (i) {
+						output << ", " << ptr;
+					} else {
+						output << ptr;
+					}
+
                     while (*ptr != 0) ++ptr;
+
                     ++ptr;
+					++i;
                 }
+
+				output << '\n';
             }
             output << '\n';
         }

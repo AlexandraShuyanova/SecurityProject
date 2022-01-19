@@ -29,7 +29,7 @@ private:
 	int getInfoBIOS();
 	std::string getVolumeSerialNumber(const QString& drive);
 	QJsonObject fromStringToJsonObject(const QString& out);
-	QJsonObject fromStringToJsonObject(QStringList& stringList);
+	QJsonArray EchoClient::fromListToJsonArray(const QStringList &volumesList);
 	std::string executeCommand(const char* cmd);
 };
 

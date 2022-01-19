@@ -14,13 +14,13 @@
 #include <iomanip>
 #include <QDir>
 #include <string>
-#include "qtextstream.h"
 #include "qtextcodec.h"
 #include "qjsonobject.h"
 #include "qjsondocument.h"
 #include "qjsonarray.h"
 #include "smbios.h"
 #include "smbios_decode.h"
+#include <sstream>
 
 using namespace std;
 
@@ -64,14 +64,15 @@ void EchoClient::onConnected()
 	getInfoBIOS();
 	
 	QJsonObject mainObject;
-	
-	mainObject.insert("OS", QSysInfo::prettyProductName());
+	QJsonObject deviceObject;
+	deviceObject.insert("os", QSysInfo::prettyProductName());
+	deviceObject.insert("volumes", fromListToJsonArray(volumeSerialNumbers));
 	mainObject.insert("method", "auth");
-	mainObject.insert("Volumes Info", fromStringToJsonObject(volumeSerialNumbers));
-	mainObject.insert("BIOS Info", fromStringToJsonObject(infoBios));
+	mainObject.insert("device", deviceObject);
+	mainObject.insert("smbios", fromStringToJsonObject(infoBios));
 
 	QJsonDocument doc(mainObject);
-	//qDebug() << doc;
+	qDebug().noquote() << doc.toJson(QJsonDocument::Indented);
 	QString strJson(doc.toJson(QJsonDocument::Compact));
 	
 	QTextCodec* codec = QTextCodec::codecForName("Windows-1251");
@@ -153,8 +154,9 @@ int EchoClient::getInfoBIOS()
 	smbios::Parser parser(buffer.data(), buffer.size());
 	if (parser.valid())
 	{
-		QTextStream stream(&infoBios);
-		printSMBIOS(parser, stream);
+		std::stringstream stringStream;
+		printSMBIOS(parser, stringStream);
+		infoBios = QString::fromStdString(stringStream.str());
 		//qDebug() << infoBios << endl;
 		return 0;
 		
@@ -171,9 +173,9 @@ QJsonObject EchoClient::fromStringToJsonObject(const QString &out)
 	QStringList elemList;
 	QStringList outList = out.split(QLatin1Char('\n'), QString::SkipEmptyParts);
 	
-	QStringList sections = ["bios", "sysinfo", "baseboard",
-	                        "sysenclosure", "processor", "sysslot",
-							"physmem", "memory", "oemstrings"];
+	QStringList sections = {"bios", "sysinfo", "baseboard",
+							"sysenclosure", "processor", "sysslot",
+							"physmem", "memory", "oemstrings"};
 	
 	for (const auto& section : sections) {
 		recordObject.insert(section, QJsonArray());
@@ -199,9 +201,9 @@ QJsonObject EchoClient::fromStringToJsonObject(const QString &out)
 				break;
 			}
 
-			QString key = elemList[0].replace("[" + sections[sectionIndex] + "] " ,);
+			QString key = elemList[0].replace("[" + sections[sectionIndex] + "] " , "");
 			
-			QJsonArray array = recordObject[sections[i]].toArray();
+			QJsonArray array = recordObject[sections[sectionIndex]].toArray();
 			
 			while (array.size() <= valueIndex || array[valueIndex].toObject().contains(key)) {
 				if (array.size() <= valueIndex) {
@@ -213,8 +215,7 @@ QJsonObject EchoClient::fromStringToJsonObject(const QString &out)
 			
 			QJsonObject jsonObject = array[valueIndex].toObject();
 			jsonObject.insert(key, value);
-			
-			array.insert(valueIndex, jsonObject);
+			array[valueIndex] = jsonObject;
 			recordObject.insert(sections[sectionIndex], array);
 		}	
 		else
@@ -227,18 +228,16 @@ QJsonObject EchoClient::fromStringToJsonObject(const QString &out)
 	return recordObject;
 }
 
-QJsonObject EchoClient::fromStringToJsonObject(QStringList &volumesList)
+QJsonArray EchoClient::fromListToJsonArray(const QStringList &volumesList)
 {
-	QJsonObject recordObject;
 	QJsonArray recordArray;
+	
 	for (QString volumeNum : volumesList)
 	{
 		recordArray.push_back(volumeNum);
-		//qDebug() << volumeNum << endl;
 	}
-	recordObject.insert("Volume serial numbers", recordArray);
 
-	return recordObject;
+	return recordArray;
 }
 
 void EchoClient::onTextMessageReceived(QString message)
