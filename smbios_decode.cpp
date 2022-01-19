@@ -101,18 +101,18 @@ bool printSMBIOS(
         {
             if (version >= smbios::SMBIOS_2_0)
             {
-                output << "BIOS_vendor:" << entry->data.bios.Vendor << '\n';
-                output << "BIOS_version:" << entry->data.bios.BIOSVersion << '\n';
-                output << "BIOS_starting_segment:" << std::hex << (int) entry->data.bios.BIOSStartingSegment << std::dec << '\n';
-                output << "BIOS_release_date:" << entry->data.bios.BIOSReleaseDate << '\n';
-                output << "BIOS_rom_size:" << (((int) entry->data.bios.BIOSROMSize + 1) * 64) << " KiB \n";
+                output << "[bios] vendor:" << entry->data.bios.Vendor << '\n';
+                output << "[bios] version:" << entry->data.bios.BIOSVersion << '\n';
+                output << "[bios] starting_segment:" << std::hex << (int) entry->data.bios.BIOSStartingSegment << std::dec << '\n';
+                output << "[bios] release_date:" << entry->data.bios.BIOSReleaseDate << '\n';
+                output << "[bios] rom_size:" << (((int) entry->data.bios.BIOSROMSize + 1) * 64) << " KiB \n";
             }
             if (version >= smbios::SMBIOS_2_4)
             {
-                output << "BIOS_system_bios_major_release:" << (int) entry->data.bios.SystemBIOSMajorRelease  << '\n';
-                output << "BIOS_system_bios_minor_release:" << (int) entry->data.bios.SystemBIOSMinorRelease  << '\n';
-                output << "BIOS_embedded_firmware_major_release:" << (int) entry->data.bios.EmbeddedFirmwareMajorRelease  << '\n';
-                output << "BIOS_embedded_firmware_minor_release:" << (int) entry->data.bios.EmbeddedFirmwareMinorRelease  << '\n';
+                output << "[bios] system_bios_major_release:" << (int) entry->data.bios.SystemBIOSMajorRelease  << '\n';
+                output << "[bios] system_bios_minor_release:" << (int) entry->data.bios.SystemBIOSMinorRelease  << '\n';
+                output << "[bios] embedded_firmware_major_release:" << (int) entry->data.bios.EmbeddedFirmwareMajorRelease  << '\n';
+                output << "[bios] embedded_firmware_minor_release:" << (int) entry->data.bios.EmbeddedFirmwareMinorRelease  << '\n';
             }
             output << '\n';
         }
@@ -121,22 +121,22 @@ bool printSMBIOS(
         {
             if (version >= smbios::SMBIOS_2_0)
             {
-                output << "SYSINFO_manufacturer:" << entry->data.sysinfo.Manufacturer << '\n';
-                output << "SYSINFO_product_name:" << entry->data.sysinfo.ProductName << '\n';
-                output << "SYSINFO_version:" << entry->data.sysinfo.Version << '\n';
-                output << "SYSINFO_serial_number:" << entry->data.sysinfo.SerialNumber << '\n';
+                output << "[sysinfo] manufacturer:" << entry->data.sysinfo.Manufacturer << '\n';
+                output << "[sysinfo] product_name:" << entry->data.sysinfo.ProductName << '\n';
+                output << "[sysinfo] version:" << entry->data.sysinfo.Version << '\n';
+                output << "[sysinfo] serial_number:" << entry->data.sysinfo.SerialNumber << '\n';
             }
             if (version >= smbios::SMBIOS_2_1)
             {
-                //output << "SYSINFO_uuid:";
+                //output << "[sysinfo] uuid:";
                 /*for (size_t i = 0; i < 16; ++i)
                     output << std::hex << std::setw(2) << std::setfill('0') << (int) entry->data.sysinfo.UUID[i]  << ' ';
                 output << '\n' << std::dec;*/
             }
             if (version >= smbios::SMBIOS_2_4)
             {
-                output << "SYSINFO_sku_number:" << entry->data.sysinfo.SKUNumber << '\n';
-                output << "SYSINFO_family:" << entry->data.sysinfo.Family << '\n';
+                output << "[sysinfo] sku_number:" << entry->data.sysinfo.SKUNumber << '\n';
+                output << "[sysinfo] family:" << entry->data.sysinfo.Family << '\n';
             }
             output << '\n';
         }
@@ -145,14 +145,14 @@ bool printSMBIOS(
         {
             if (version >= smbios::SMBIOS_2_0)
             {
-                output << "BASEBOARD_manufacturer:" << entry->data.baseboard.Manufacturer << '\n';
-                output << "BASEBOARD_product:" << entry->data.baseboard.Product << '\n';
-                output << "BASEBOARD_version:" << entry->data.baseboard.Version << '\n';
-                output << "BASEBOARD_serial_number:" << entry->data.baseboard.SerialNumber << '\n';
-                output << "BASEBOARD_asset_tag":" << entry->data.baseboard.AssetTag << '\n';
-                output << "BASEBOARD_location_in_chassis:" << entry->data.baseboard.LocationInChassis << '\n';
-                output << "BASEBOARD_chassis_handle:" << entry->data.baseboard.ChassisHandle << '\n';
-                output << "BASEBOARD_board_type:" << (int) entry->data.baseboard.BoardType << '\n';
+                output << "[baseboard] manufacturer:" << entry->data.baseboard.Manufacturer << '\n';
+                output << "[baseboard] product:" << entry->data.baseboard.Product << '\n';
+                output << "[baseboard] version:" << entry->data.baseboard.Version << '\n';
+                output << "[baseboard] serial_number:" << entry->data.baseboard.SerialNumber << '\n';
+                output << "[baseboard] asset_tag":" << entry->data.baseboard.AssetTag << '\n';
+                output << "[baseboard] location_in_chassis:" << entry->data.baseboard.LocationInChassis << '\n';
+                output << "[baseboard] chassis_handle:" << entry->data.baseboard.ChassisHandle << '\n';
+                output << "[baseboard] board_type:" << (int) entry->data.baseboard.BoardType << '\n';
             }
             output << '\n';
         }
@@ -161,19 +161,19 @@ bool printSMBIOS(
         {
             if (version >= smbios::SMBIOS_2_0)
             {
-                output << "SYSENCLOSURE_manufacturer:" << entry->data.sysenclosure.Manufacturer << '\n';
-                output << "SYSENCLOSURE_version:" << entry->data.sysenclosure.Version << '\n';
-                output << "SYSENCLOSURE_serial_number:" << entry->data.sysenclosure.SerialNumber << '\n';
-                output << "SYSENCLOSURE_asset_tag:" << entry->data.sysenclosure.AssetTag << "\n";
+                output << "[sysenclosure] manufacturer:" << entry->data.sysenclosure.Manufacturer << '\n';
+                output << "[sysenclosure] version:" << entry->data.sysenclosure.Version << '\n';
+                output << "[sysenclosure] serial_number:" << entry->data.sysenclosure.SerialNumber << '\n';
+                output << "[sysenclosure] asset_tag:" << entry->data.sysenclosure.AssetTag << "\n";
             }
             if (version >= smbios::SMBIOS_2_3)
             {
-                output << "SYSENCLOSURE_contained_count:" << (int) entry->data.sysenclosure.ContainedElementCount << '\n';
-                output << "SYSENCLOSURE_contained_length:" << (int) entry->data.sysenclosure.ContainedElementRecordLength << '\n';
+                output << "[sysenclosure] contained_count:" << (int) entry->data.sysenclosure.ContainedElementCount << '\n';
+                output << "[sysenclosure] contained_length:" << (int) entry->data.sysenclosure.ContainedElementRecordLength << '\n';
             }
             if (version >= smbios::SMBIOS_2_7)
             {
-                output << "SYSENCLOSURE_sku_number:" << entry->data.sysenclosure.SKUNumber << '\n';
+                output << "[sysenclosure] sku_number:" << entry->data.sysenclosure.SKUNumber << '\n';
             }
             output << '\n';
         }
@@ -182,24 +182,24 @@ bool printSMBIOS(
         {
             if (version >= smbios::SMBIOS_2_0)
             {
-                output << "PROCESSOR_socket_designation:" << entry->data.processor.SocketDesignation << '\n';
-                output << "PROCESSOR_processor_family:" << (int) entry->data.processor.ProcessorFamily << '\n';
-                output << "PROCESSOR_manufacturer:" << entry->data.processor.ProcessorManufacturer << '\n';
-                output << "PROCESSOR_version:" << entry->data.processor.ProcessorVersion << '\n';
-                //output << "PROCESSOR_processor_id:";
+                output << "[processor] socket_designation:" << entry->data.processor.SocketDesignation << '\n';
+                output << "[processor] processor_family:" << (int) entry->data.processor.ProcessorFamily << '\n';
+                output << "[processor] manufacturer:" << entry->data.processor.ProcessorManufacturer << '\n';
+                output << "[processor] version:" << entry->data.processor.ProcessorVersion << '\n';
+                //output << "[processor] processor_id:";
                 /*for (size_t i = 0; i < 8; ++i)
                     output << std::hex << std::setw(2) << std::setfill('0') << (int) entry->data.processor.ProcessorID[i] << ' ';
                 output << std::dec << '\n';*/
             }
             if (version >= smbios::SMBIOS_2_5)
             {
-                output << "PROCESSOR_core_count:" << (int) entry->data.processor.CoreCount << '\n';
-                output << "PROCESSOR_core_enabled:" << (int) entry->data.processor.CoreEnabled << '\n';
-                output << "PROCESSOR_thread_count:" << (int) entry->data.processor.ThreadCount << '\n';
+                output << "[processor] core_count:" << (int) entry->data.processor.CoreCount << '\n';
+                output << "[processor] core_enabled:" << (int) entry->data.processor.CoreEnabled << '\n';
+                output << "[processor] thread_count:" << (int) entry->data.processor.ThreadCount << '\n';
             }
             if (version >= smbios::SMBIOS_2_6)
             {
-                output << "PROCESSOR_processor_family_2:" << entry->data.processor.ProcessorFamily2 << '\n';
+                output << "[processor] processor_family_2:" << entry->data.processor.ProcessorFamily2 << '\n';
             }
             output << '\n';
         }
@@ -208,15 +208,15 @@ bool printSMBIOS(
         {
             if (version >= smbios::SMBIOS_2_0)
             {
-                output << "SYSSLOT_slot_designation:" << entry->data.sysslot.SlotDesignation << '\n';
-                output << "SYSSLOT_slot_type:" << (int) entry->data.sysslot.SlotType << '\n';
-                output << "SYSSLOT_slot_data_bus_width:" << (int) entry->data.sysslot.SlotDataBusWidth << '\n';
-                output << "SYSSLOT_slot_id:" << (int) entry->data.sysslot.SlotID << '\n';
+                output << "[sysslot] slot_designation:" << entry->data.sysslot.SlotDesignation << '\n';
+                output << "[sysslot] slot_type:" << (int) entry->data.sysslot.SlotType << '\n';
+                output << "[sysslot] slot_data_bus_width:" << (int) entry->data.sysslot.SlotDataBusWidth << '\n';
+                output << "[sysslot] slot_id:" << (int) entry->data.sysslot.SlotID << '\n';
             }
             if (version >= smbios::SMBIOS_2_6)
             {
-                output << "SYSSLOT_segment_group_number:" << entry->data.sysslot.SegmentGroupNumber << '\n';
-                output << "SYSSLOT_bus_number:" << (int) entry->data.sysslot.BusNumber << '\n';
+                output << "[sysslot] segment_group_number:" << entry->data.sysslot.SegmentGroupNumber << '\n';
+                output << "[sysslot] bus_number:" << (int) entry->data.sysslot.BusNumber << '\n';
             }
             output << '\n';
         }
@@ -225,10 +225,10 @@ bool printSMBIOS(
         {
             if (version >= smbios::SMBIOS_2_1)
             {
-                output << "PHYSMEM_use:" << std::hex << (int) entry->data.physmem.Use << std::dec << '\n';
-                output << "PHYSMEM_number_devices:" << entry->data.physmem.NumberDevices << '\n';
-                output << "PHYSMEM_maximum_capacity:" << entry->data.physmem.MaximumCapacity << " KiB\n";
-                output << "PHYSMEM_ext_maximum_capacity:" << entry->data.physmem.ExtendedMaximumCapacity << " KiB\n";
+                output << "[physmem] use:" << std::hex << (int) entry->data.physmem.Use << std::dec << '\n';
+                output << "[physmem] number_devices:" << entry->data.physmem.NumberDevices << '\n';
+                output << "[physmem] maximum_capacity:" << entry->data.physmem.MaximumCapacity << " KiB\n";
+                output << "[physmem] ext_maximum_capacity:" << entry->data.physmem.ExtendedMaximumCapacity << " KiB\n";
             }
             output << '\n';
         }
@@ -237,22 +237,22 @@ bool printSMBIOS(
         {
             if (version >= smbios::SMBIOS_2_1)
             {
-                output << "MEMORY_device_locator:" << entry->data.memory.DeviceLocator << '\n';
-                output << "MEMORY_bank_locator:" << entry->data.memory.BankLocator << '\n';
+                output << "[memory] device_locator:" << entry->data.memory.DeviceLocator << '\n';
+                output << "[memory] bank_locator:" << entry->data.memory.BankLocator << '\n';
             }
             if (version >= smbios::SMBIOS_2_3)
             {
-                output << "MEMORY_speed:" << entry->data.memory.Speed << " MHz\n";
-                output << "MEMORY_manufacturer:" << entry->data.memory.Manufacturer << '\n';
-                output << "MEMORY_serial_number:" << entry->data.memory.SerialNumber << '\n';
-                output << "MEMORY_asset_tag_number:" << entry->data.memory.AssetTagNumber << '\n';
-                output << "MEMORY_part_number" << entry->data.memory.PartNumber << '\n';
-                output << "MEMORY_size:" << entry->data.memory.Size << " MiB\n";
-                output << "MEMORY_extended_size:" << entry->data.memory.ExtendedSize << " MiB\n";
+                output << "[memory] speed:" << entry->data.memory.Speed << " MHz\n";
+                output << "[memory] manufacturer:" << entry->data.memory.Manufacturer << '\n';
+                output << "[memory] serial_number:" << entry->data.memory.SerialNumber << '\n';
+                output << "[memory] asset_tag_number:" << entry->data.memory.AssetTagNumber << '\n';
+                output << "[memory] part_number" << entry->data.memory.PartNumber << '\n';
+                output << "[memory] size:" << entry->data.memory.Size << " MiB\n";
+                output << "[memory] extended_size:" << entry->data.memory.ExtendedSize << " MiB\n";
             }
             if (version >= smbios::SMBIOS_2_7)
             {
-                output << "MEMORY_configured_clock_speed:" << entry->data.memory.ConfiguredClockSpeed << " MHz\n";
+                output << "[memory] configured_clock_speed:" << entry->data.memory.ConfiguredClockSpeed << " MHz\n";
             }
             output << '\n';
         }
@@ -261,7 +261,7 @@ bool printSMBIOS(
         {
             if (version >= smbios::SMBIOS_2_0)
             {
-                output << "OEMSTRINGS_count:" << (int) entry->data.oemstrings.Count << '\n';
+                output << "[oemstrings] count:" << (int) entry->data.oemstrings.Count << '\n';
                 const char *ptr = entry->data.oemstrings.Values;
                 int c = entry->data.oemstrings.Count;
                 while (ptr != nullptr && *ptr != 0 && c > 0)

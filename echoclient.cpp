@@ -170,7 +170,14 @@ QJsonObject EchoClient::fromStringToJsonObject(const QString &out)
 	QJsonArray recordArray;
 	QStringList elemList;
 	QStringList outList = out.split(QLatin1Char('\n'), QString::SkipEmptyParts);
-	//qDebug() << outList << endl;
+	
+	QStringList sections = ["bios", "sysinfo", "baseboard",
+	                        "sysenclosure", "processor", "sysslot",
+							"physmem", "memory", "oemstrings"];
+	
+	for (const auto& section : sections) {
+		recordObject.insert(section, QJsonArray());
+	}
 
 	for(const QString& elem : outList)
 	{
@@ -178,35 +185,46 @@ QJsonObject EchoClient::fromStringToJsonObject(const QString &out)
 		if (elemList.length() > 1)
 		{
 			QString value = elemList.mid(1).join(':');
-
-			if (!recordObject.contains(elemList[0])) {
-				recordObject.insert(elemList[0], value);
-			} else {
-				int i = 1;
-				QString key = elemList[0];
-
-				while (recordObject.contains(key)) {
-					key = elemList[0] + "_" + QString::number(i);
-					i++;
+			
+			int sectionIndex = -1;
+			int valueIndex = 0;
+			
+			for (int i = 0; i < sections.length(); i++) {
+				if (elemList[0].contains(sections[i])) {
+					sectionIndex = i;
 				}
-
-				if (!recordObject.contains(key)) {
-					recordObject.insert(key, value);
-				}
-
-				//qDebug() << key << endl;
 			}
+			
+			if (sectionIndex == -1) {
+				break;
+			}
+
+			QString key = elemList[0].replace("[" + sections[sectionIndex] + "] " ,);
+			
+			QJsonArray array = recordObject[sections[i]].toArray();
+			
+			while (array.size() <= valueIndex || array[valueIndex].toObject().contains(key)) {
+				if (array.size() <= valueIndex) {
+					array.push_back(QJsonObject());
+				} else {
+					valueIndex++;
+				}
+			}
+			
+			QJsonObject jsonObject = array[valueIndex].toObject();
+			jsonObject.insert(key, value);
+			
+			array.insert(valueIndex, jsonObject);
+			recordObject.insert(sections[sectionIndex], array);
 		}	
-		
 		else
 		{
-			recordArray.push_back(elemList[0]);
-			recordObject.insert("Some data", recordArray);
+			//recordArray.push_back(elemList[0]);
+			//recordObject.insert("Some data", recordArray);
 		}
 	}
 	
 	return recordObject;
-	//qDebug() << doc.toJson();
 }
 
 QJsonObject EchoClient::fromStringToJsonObject(QStringList &volumesList)
